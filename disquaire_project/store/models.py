@@ -19,12 +19,12 @@ class Contact(models.Model):
     def __str__(self):
         return self.name
 
-class Disk(models.Model):
+class Album(models.Model):
     reference = models.IntegerField('référence')
     created_at = models.DateTimeField('Date de création', auto_now_add=True)
     active = models.BooleanField('Activé', default=True)
     title = models.CharField('Titre', max_length=200)
-    artists = models.ManyToManyField(Artist, 'artistes', blank=True)
+    artists = models.ManyToManyField(Artist, related_name='disks', blank=True)
 
     class Meta:
         verbose_name = "disque"
@@ -36,7 +36,7 @@ class Booking(models.Model):
     created_at = models.DateTimeField('Demande effectuée le', auto_now_add=True)
     contacted = models.BooleanField('Demande traitée', default=False)
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
-    disk = models.OneToOneField(Disk, primary_key=True)
+    album = models.OneToOneField(Album, primary_key=True)
 
     class Meta:
         verbose_name = "réservation"
