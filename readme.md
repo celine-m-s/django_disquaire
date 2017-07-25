@@ -6,14 +6,21 @@
   - [x] Contact
 - [x] associations : problem with many to many => <class 'manager.admin.DiskInline'>: (admin.E202) 'manager.Disk' has no ForeignKey to 'manager.Artist'.
 - [x] Admin
+- [x] Use a Postgresql DB
 - [ ] Views:
-  - index
-  - read
-  - search
-  - result list
-  - contact form
+  - [x] static files
+  - [x] index
+  - [ ] read
+  - [ ] search
+  - [ ] result list
+  - [ ] contact form
+- [ ] Unicity constraints in models:
+  - [ ] reference should be unique
+  - [ ] Artist name should be unique
 - [ ] Images :
-  - [ ] Ajout dans models
+  - [ ] Store as BLOB => https://stackoverflow.com/questions/34598299/store-blob-image-on-server-with-python
   - [ ] Admin : ajouter une photo à un disque
   - [ ] Views : afficher les photos
 - [x] Change admin language and TIME_ZONE
+
+List namespaces
