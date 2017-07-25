@@ -6,9 +6,11 @@ from django.contrib.contenttypes.models import ContentType
 from .models import Artist, Contact, Booking, Disk
 
 
+# there is not easier way to do this, as per https://stackoverflow.com/questions/2470285/foreign-keys-in-django-admin-list-display
 class AdminURLMixin(object):
     def get_admin_url(self, obj):
         content_type = ContentType.objects.get_for_model(obj.__class__)
+        # as per https://docs.djangoproject.com/en/1.11/ref/contrib/admin/#admin-reverse-urls
         return reverse("admin:%s_%s_change" % (
             content_type.app_label,
             content_type.model),
@@ -65,6 +67,8 @@ class BookingAdmin(admin.ModelAdmin, AdminURLMixin):
         return False
 
 
+# this is the standard way to do it, as per
+# https://docs.djangoproject.com/en/1.11/ref/contrib/admin/#working-with-many-to-many-models
 class DiskArtistInline(admin.TabularInline):
     model = Disk.artists.through
     extra = 1

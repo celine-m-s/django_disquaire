@@ -20,11 +20,13 @@ class Contact(models.Model):
         return self.name
 
 class Disk(models.Model):
+    # There is no unicity constraint and no index on the reference. Are you sure you need this?
     reference = models.IntegerField('référence')
     created_at = models.DateTimeField('Date de création', auto_now_add=True)
+    # what does "active" mean?
     active = models.BooleanField('Activé', default=True)
     title = models.CharField('Titre', max_length=200)
-    artists = models.ManyToManyField(Artist, 'artistes', blank=True)
+    artists = models.ManyToManyField(Artist, related_name='disks', blank=True)
 
     class Meta:
         verbose_name = "disque"
