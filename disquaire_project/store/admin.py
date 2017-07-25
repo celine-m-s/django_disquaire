@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
 from django.contrib.contenttypes.models import ContentType
 
-from .models import Artist, Contact, Booking, Disk
+from .models import Artist, Contact, Booking, Album
 
 
 # there is not easier way to do this, as per https://stackoverflow.com/questions/2470285/foreign-keys-in-django-admin-list-display
@@ -20,16 +20,16 @@ class AdminURLMixin(object):
 class BookingInline(admin.TabularInline, AdminURLMixin):
     model = Booking
     extra = 0
-    readonly_fields = ["created_at", "contact", 'disk_link']
+    readonly_fields = ["created_at", "contact", 'album_link']
     fieldsets = [
-        (None, {'fields': ['contact', 'created_at', 'disk_link', 'contacted']})
+        (None, {'fields': ['contact', 'created_at', 'album_link', 'contacted']})
         ]
     verbose_name = "Réservation"
     verbose_name_plural = "Réservations"
 
-    def disk_link(self, obj):
-        url = self.get_admin_url(obj.disk)
-        return mark_safe("<a href='{}'>{}</a>".format(url, obj.disk.title))
+    def album_link(self, obj):
+        url = self.get_admin_url(obj.album)
+        return mark_safe("<a href='{}'>{}</a>".format(url, obj.album.title))
 
     def has_add_permission(self, request):
         return False
@@ -45,13 +45,13 @@ class ContactAdmin(admin.ModelAdmin):
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin, AdminURLMixin):
-    readonly_fields = ["created_at", "contact_link", "disk_link"]
+    readonly_fields = ["created_at", "contact_link", "album_link"]
 
     fieldsets = [
-        (None, {'fields': ['contact_link', 'disk_link', 'created_at', 'contacted']})
+        (None, {'fields': ['contact_link', 'album_link', 'created_at', 'contacted']})
         ]
 
-    list_display = ['contact', 'disk', 'created_at', 'contacted']
+    list_display = ['contact', 'album', 'created_at', 'contacted']
 
     list_filter = ['created_at', 'contacted']
 
@@ -59,9 +59,9 @@ class BookingAdmin(admin.ModelAdmin, AdminURLMixin):
         url = self.get_admin_url(obj.contact)
         return mark_safe("<a href='{}'>{}</a>".format(url, obj.contact.name))
 
-    def disk_link(self, obj):
-        url = self.get_admin_url(obj.disk)
-        return mark_safe("<a href='{}'>{}</a>".format(url, obj.disk.title))
+    def album_link(self, obj):
+        url = self.get_admin_url(obj.album)
+        return mark_safe("<a href='{}'>{}</a>".format(url, obj.album.title))
 
     def has_add_permission(self, request):
         return False
@@ -69,8 +69,8 @@ class BookingAdmin(admin.ModelAdmin, AdminURLMixin):
 
 # this is the standard way to do it, as per
 # https://docs.djangoproject.com/en/1.11/ref/contrib/admin/#working-with-many-to-many-models
-class DiskArtistInline(admin.TabularInline):
-    model = Disk.artists.through
+class AlbumArtistInline(admin.TabularInline):
+    model = Album.artists.through
     extra = 1
     verbose_name = "Disque"
     verbose_name_plural = "Disques"
@@ -78,9 +78,9 @@ class DiskArtistInline(admin.TabularInline):
 
 @admin.register(Artist)
 class ArtistAdmin(admin.ModelAdmin):
-    inlines = [DiskArtistInline,]
+    inlines = [AlbumArtistInline,]
 
 
-@admin.register(Disk)
-class DiskAdmin(admin.ModelAdmin):
+@admin.register(Album)
+class AlbumAdmin(admin.ModelAdmin):
     search_fields = ['reference', 'title']
