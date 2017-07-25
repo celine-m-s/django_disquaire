@@ -22,7 +22,7 @@ class Contact(models.Model):
 class Album(models.Model):
     reference = models.IntegerField('référence')
     created_at = models.DateTimeField('Date de création', auto_now_add=True)
-    active = models.BooleanField('Activé', default=True)
+    available = models.BooleanField('Disponible', default=True)
     title = models.CharField('Titre', max_length=200)
     artists = models.ManyToManyField(Artist, related_name='disks', blank=True)
 
