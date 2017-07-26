@@ -1,3 +1,5 @@
+# I think it would be interesting to add albums with multiple artists, for the
+# sake of the example. Also, it's not necessary to add so many albums.
 albums:
   - title: All Day and All of the Night
     artists:
