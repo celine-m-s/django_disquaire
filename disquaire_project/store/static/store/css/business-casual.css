@@ -201,3 +201,21 @@ footer p {
   color: #999;
   text-decoration: none;
 }
+
+.artist_name {
+  font-size: 20px;
+  font-weight: normal;
+}
+
+.intro-text {
+  font-size: 40px;
+  font-weight: 300;
+}
+
+.detail-separator {
+  padding-bottom: 25px;
+}
+
+.clearfix {
+  padding-bottom: 40px;
+}

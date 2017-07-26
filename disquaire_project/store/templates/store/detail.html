@@ -1,0 +1,40 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+
+    <div class="container">
+      <div class="row">
+        <div class="box">
+          <hr>
+          <h1 class="intro-text text-center">{{ album_title }}</h1>
+          <hr class="detail-separator">
+          <div class="col-md-6">
+            <img src="http://placehold.it/750x450" alt="{{ album_title }}" class="img-responsive">
+          </div>
+          <div class="col-md-6">
+            <div style="margin-bottom:45px">
+              <h2 class="text-center artist_name">Artistes</h2>
+              <p>{{ artists_name }}</p>
+            </div>
+
+            <h2 class="text-center artist_name">Réserver {{ album_title }}</h2>
+            <p style="margin-bottom: 20px;">Demandez-nous de mettre de côté {{ album_title }} et venez le chercher dès demain en magasin ! </p>
+            <form class="form-inline">
+            <div class="form-group">
+              <label for="name">Nom</label>
+              <input type="text" class="form-control" id="name" placeholder="Gavin Kavanagh">
+            </div>
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <input type="email" class="form-control" id="email" placeholder="gavin.kavanagh@lebateaupirate.com">
+            </div>
+            <button type="submit" class="btn btn-success">Réserver</button>
+          </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- /.container -->
+
+{% endblock %}
