@@ -23,4 +23,8 @@
   - [ ] Views : afficher les photos
 - [x] Change admin language and TIME_ZONE
 
-List namespaces
+
+ajouter yaml dans requirements
+- Dump de la base au format JSON puis import dans la base via loaddata
+
+- pagination : méthode paginate

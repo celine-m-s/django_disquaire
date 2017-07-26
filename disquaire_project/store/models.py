@@ -20,7 +20,7 @@ class Contact(models.Model):
         return self.name
 
 class Album(models.Model):
-    reference = models.IntegerField('référence')
+    reference = models.IntegerField('référence', blank=True)
     created_at = models.DateTimeField('Date de création', auto_now_add=True)
     available = models.BooleanField('Disponible', default=True)
     title = models.CharField('Titre', max_length=200)
@@ -36,7 +36,7 @@ class Booking(models.Model):
     created_at = models.DateTimeField('Demande effectuée le', auto_now_add=True)
     contacted = models.BooleanField('Demande traitée', default=False)
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
-    album = models.OneToOneField(Album, primary_key=True)
+    album = models.OneToOneField(Album)
 
     class Meta:
         verbose_name = "réservation"
