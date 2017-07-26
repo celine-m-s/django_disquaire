@@ -1,0 +1,7 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+
+    {% include 'store/_list.html' with list_title='Tous nos disques' paginate=True%}
+
+{% endblock %}

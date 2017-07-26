@@ -10,12 +10,12 @@
 - [ ] Views:
   - [x] static files
   - [x] index
-  - [ ] read
+  - [x] list albums + paginate (méthode paginate)
+  - [x] read
   - [ ] search
   - [ ] result list
   - [ ] contact form
 - [ ] Unicity constraints in models:
-  - [ ] reference should be unique
   - [ ] Artist name should be unique
 - [ ] Images :
   - [ ] Store as BLOB => https://stackoverflow.com/questions/34598299/store-blob-image-on-server-with-python
@@ -25,6 +25,3 @@
 
 
 ajouter yaml dans requirements
-- Dump de la base au format JSON puis import dans la base via loaddata
-
-- pagination : méthode paginate
