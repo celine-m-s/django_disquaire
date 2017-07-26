@@ -36,6 +36,8 @@ class Booking(models.Model):
     created_at = models.DateTimeField('Demande effectuée le', auto_now_add=True)
     contacted = models.BooleanField('Demande traitée', default=False)
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
+    # Why primary_key=True? Because of that, there is no more 'id' field, although it's pretty convenient.
+    # https://docs.djangoproject.com/en/1.11/topics/db/models/#automatic-primary-key-fields
     album = models.OneToOneField(Album, primary_key=True)
 
     class Meta:
