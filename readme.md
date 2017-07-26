@@ -12,8 +12,8 @@
   - [x] index
   - [x] list albums + paginate (méthode paginate)
   - [x] read
-  - [ ] search
-  - [ ] result list
+  - [x] search
+  - [x] result list
   - [ ] contact form
 - [ ] Unicity constraints in models:
   - [ ] Artist name should be unique

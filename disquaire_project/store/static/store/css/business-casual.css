@@ -219,3 +219,9 @@ footer p {
 .clearfix {
   padding-bottom: 40px;
 }
+
+#search_form {
+  width: 43%;
+  margin: auto;
+  text-align: center;
+}

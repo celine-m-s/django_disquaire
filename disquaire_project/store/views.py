@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from .models import Album
+from .models import Album, Artist
 
 
 
@@ -38,3 +38,19 @@ def listing(request):
         albums = paginator.page(paginator.num_pages)
 
     return render(request, 'store/listing.html', {'albums': albums})
+
+
+def search(request):
+    query = request.GET.get('query')
+    # title contains the query is and query is not sensitive to case.
+    albums = Album.objects.filter(title__icontains=query)
+    if albums.count() == 0:
+        artists = Artist.objects.filter(name__icontains=query)
+        ids = [artist.id for artist in artists ]
+        albums = Album.objects.filter(id__in=ids)
+    title = "Résultats pour la requête %s"%query
+    context = {
+        'albums': albums,
+        'query': title
+    }
+    return render(request, 'store/search.html', context)
