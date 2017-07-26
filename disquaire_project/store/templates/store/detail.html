@@ -19,17 +19,19 @@
 
             <h2 class="text-center artist_name">Réserver {{ album_title }}</h2>
             <p style="margin-bottom: 20px;">Demandez-nous de mettre de côté {{ album_title }} et venez le chercher dès demain en magasin ! </p>
-            <form class="form-inline">
-            <div class="form-group">
-              <label for="name">Nom</label>
-              <input type="text" class="form-control" id="name" placeholder="Gavin Kavanagh">
-            </div>
-            <div class="form-group">
-              <label for="email">E-mail</label>
-              <input type="email" class="form-control" id="email" placeholder="gavin.kavanagh@lebateaupirate.com">
-            </div>
-            <button type="submit" class="btn btn-success">Réserver</button>
-          </form>
+            <form class="form-inline" action="{% url 'store:contact' %}" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="name">Nom</label>
+                <input type="text" class="form-control" id="name" placeholder="Gavin Kavanagh" name="name">
+              </div>
+              <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" class="form-control" id="email" placeholder="gavin.kavanagh@lebateaupirate.com" name="email">
+              </div>
+              <input type="hidden" class="hidden" value="{{ album_id }}" name="album_id">
+              <button type="submit" class="btn btn-success">Réserver</button>
+            </form>
           </div>
         </div>
 
