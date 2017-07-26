@@ -3,3 +3,4 @@ disquaire_project/manager/__pycache__
 disquaire_project/migrations/__pycache__
 disquaire_project/db.*
 __pycache__
+store/store.json
