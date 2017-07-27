@@ -21,5 +21,6 @@ from store import views
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^store/', include('store.urls')),
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^admin/', admin.site.urls)
 ]

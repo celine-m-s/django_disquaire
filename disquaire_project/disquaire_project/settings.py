@@ -29,9 +29,11 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+# AdminDoc documentation: https://docs.djangoproject.com/en/1.8/ref/contrib/admin/admindocs/#module-django.contrib.admindocs
 
 INSTALLED_APPS = [
     'store.apps.StoreConfig',
+    'django.contrib.admindocs',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.contrib.admindocs.middleware.XViewMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
