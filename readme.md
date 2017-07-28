@@ -18,9 +18,8 @@
 - [x] Transactions
 - [x] Unicity constraints in models:
   - [x] Artist name should be unique
-- [ ] Images :
-  - [ ] Store as BLOB => https://stackoverflow.com/questions/34598299/store-blob-image-on-server-with-python
-  - [ ] Admin : ajouter une photo à un disque
-  - [ ] Views : afficher les photos
+- [x] Images :
+  - [x] Admin : ajouter une photo à un disque
+  - [x] Views : afficher les photos
 - [x] Change admin language and TIME_ZONE
-- tests : fixtures + tester les associations
+- [ ] tests : fixtures + tester les associations

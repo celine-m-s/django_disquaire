@@ -25,6 +25,7 @@ class Album(models.Model):
     available = models.BooleanField('Disponible', default=True)
     title = models.CharField('Titre', max_length=200)
     artists = models.ManyToManyField(Artist, related_name='disks', blank=True)
+    picture = models.TextField('Image')
 
     class Meta:
         verbose_name = "disque"

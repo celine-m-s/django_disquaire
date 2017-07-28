@@ -24,7 +24,8 @@ def detail(request, album_id):
         'album_title': album.title,
         'artists_name': artists_name,
         'album_id': album.id,
-        'form': form
+        'form': form,
+        'thumbnail': album.picture
     }
     return render(request, 'store/detail.html', context)
 
