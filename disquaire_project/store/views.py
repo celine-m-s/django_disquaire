@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render, HttpResponseRedirect, reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
+from django.db import transaction, IntegrityError
 
 from .models import Album, Artist, Contact, Booking
 from .forms import BookingForm
@@ -72,22 +73,23 @@ def contact(request):
         email = form.cleaned_data['email']
         name = form.cleaned_data['name']
         try:
-            contact = Contact.objects.create(
-                email=email,
-                name=name
-            )
-            album = Album.objects.get(id=album_id)
-            album.available = False
-            booking = Booking.objects.create(
-                contact=contact,
-                created_at=timezone.now(),
-                album=album
-            )
-            context = {
-                'title': "Merci !",
-                'message': "Nous vous contacterons dès que notre radio retrouvera le chemin des ondes (en résumé : très vite)."
-            }
-        except:
+            with transaction.atomic():
+                contact = Contact.objects.create(
+                    email=email,
+                    name=name
+                )
+                album = Album.objects.get(id=album_id)
+                album.available = False
+                booking = Booking.objects.create(
+                    contact=contact,
+                    created_at=timezone.now(),
+                    album=album
+                )
+                context = {
+                    'title': "Merci !",
+                    'message': "Nous vous contacterons dès que notre radio retrouvera le chemin des ondes (en résumé : très vite)."
+                }
+        except IntegrityError:
             context = {
                 'title': "Mince !",
                 'message': "Une erreur technique est arrivée. Ne vous en faites pas : nous sommes déjà sur le pont du navire pour investiguer. Recommencez votre requête, moussaillon !"
