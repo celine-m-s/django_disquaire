@@ -1,7 +1,7 @@
 from django.db import models
 
 class Artist(models.Model):
-    name = models.CharField('nom', max_length=200)
+    name = models.CharField('nom', max_length=200, unique=True)
 
     class Meta:
         verbose_name = "artiste"
