@@ -1,9 +1,9 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, HttpResponseRedirect, reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
 
 from .models import Album, Artist, Contact, Booking
-
+from .forms import BookingForm
 
 
 def index(request):
@@ -18,10 +18,12 @@ def detail(request, album_id):
     album = get_object_or_404(Album, pk=album_id)
     artists = [artist.name for artist in album.artists.all()]
     artists_name = " ".join(artists)
+    form = BookingForm()
     context = {
         'album_title': album.title,
         'artists_name': artists_name,
-        'album_id': album.id
+        'album_id': album.id,
+        'form': form
     }
     return render(request, 'store/detail.html', context)
 
@@ -64,28 +66,51 @@ def search(request):
 
 
 def contact(request):
-    email = request.POST.get('email')
-    name = request.POST.get('name')
+    form = BookingForm(request.POST)
     album_id = request.POST.get('album_id')
-    try:
-        contact = Contact.objects.create(
-            email=email,
-            name=name
-        )
-        album = Album.objects.get(id=album_id)
-        album.available = False
-        booking = Booking.objects.create(
-            contact=contact,
-            created_at=timezone.now(),
-            album=album
-        )
+    if form.is_valid():
+        email = form.cleaned_data['email']
+        name = form.cleaned_data['name']
+        try:
+            contact = Contact.objects.create(
+                email=email,
+                name=name
+            )
+            album = Album.objects.get(id=album_id)
+            album.available = False
+            booking = Booking.objects.create(
+                contact=contact,
+                created_at=timezone.now(),
+                album=album
+            )
+            context = {
+                'title': "Merci !",
+                'message': "Nous vous contacterons dès que notre radio retrouvera le chemin des ondes (en résumé : très vite)."
+            }
+        except:
+            context = {
+                'title': "Mince !",
+                'message': "Une erreur technique est arrivée. Ne vous en faites pas : nous sommes déjà sur le pont du navire pour investiguer. Recommencez votre requête, moussaillon !"
+            }
+        return render(request, 'store/thanks.html', context)
+    else:
+        # TODO: see with Regis.
+        # I wanted to do a redirection but the "form" object is not passed.
+        # I wonder if it's a good practice to do something like:
+        # url = reverse('store:detail', args=(album_id=album_id))
+        # return HttpResponseRedirect('{}?{}'.format(url, form))
+        # I think it's very bad in terms of security.
+        # But this solution is bothering me because we repeat the exact thing se have in `detail`
+
+        album = get_object_or_404(Album, pk=album_id)
+        artists = [artist.name for artist in album.artists.all()]
+        artists_name = " ".join(artists)
         context = {
-            'title': "Merci !",
-            'message': "Nous vous contacterons dès que notre radio retrouvera le chemin des ondes (en résumé : très vite)."
+            'album_title': album.title,
+            'artists_name': artists_name,
+            'album_id': album.id,
+            'form': form,
+            'errors': form.errors.items()
         }
-    except:
-        context = {
-            'title': "Mince !",
-            'message': "Une erreur technique est arrivée. Ne vous en faites pas : nous sommes déjà sur le pont du navire pour investiguer. Recommencez votre requête, moussaillon !"
-        }
-    return render(request, 'store/thanks.html', context)
+        # import pdb; pdb.set_trace()
+        return render(request, 'store/detail.html', context)

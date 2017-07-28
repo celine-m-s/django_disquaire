@@ -21,17 +21,28 @@
             <p style="margin-bottom: 20px;">Demandez-nous de mettre de côté {{ album_title }} et venez le chercher dès demain en magasin ! </p>
             <form class="form-inline" action="{% url 'store:contact' %}" method="post">
               {% csrf_token %}
-              <div class="form-group">
-                <label for="name">Nom</label>
-                <input type="text" class="form-control" id="name" placeholder="Gavin Kavanagh" name="name">
+
+              <div class="form-group  {% if form.name.errors %}has-warning has-feedback{% endif %}">
+                <label for="{{ form.name.id_for_label }}" class="control-label">Nom</label>
+                {{ form.name }}
               </div>
-              <div class="form-group">
-                <label for="email">E-mail</label>
-                <input type="email" class="form-control" id="email" placeholder="gavin.kavanagh@lebateaupirate.com" name="email">
+              <div class="form-group  {% if form.email.errors %}has-warning has-feedback{% endif %}">
+                <label for="{{ form.email.id_for_label }}" class="control-label">E-mail</label>
+                {{ form.email }}
               </div>
               <input type="hidden" class="hidden" value="{{ album_id }}" name="album_id">
+
               <button type="submit" class="btn btn-success">Réserver</button>
             </form>
+            {% if errors %}
+              <div>
+                {# why is this generating an ul and li? #}
+                {% for key, error in errors %}
+                  {{ error|escape }}
+                {% endfor %}
+              </div>
+
+            {% endif %}
           </div>
         </div>
 

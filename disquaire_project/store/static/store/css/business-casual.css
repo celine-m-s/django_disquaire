@@ -225,3 +225,17 @@ footer p {
   margin: auto;
   text-align: center;
 }
+
+.form-group.has-feedback .form-control {
+  padding: 6px 5px;
+  color: red;
+}
+
+.errorlist {
+  margin: 10px auto;
+}
+
+.errorlist li {
+  display: block;
+  color: red;
+}
