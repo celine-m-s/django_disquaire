@@ -10,7 +10,7 @@ class Artist(models.Model):
         return self.name
 
 class Contact(models.Model):
-    email = models.CharField('e-mail', max_length=100)
+    email = models.EmailField('e-mail', max_length=100)
     name = models.CharField('nom', max_length=200)
 
     class Meta:

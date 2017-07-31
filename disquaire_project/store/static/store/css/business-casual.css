@@ -235,7 +235,6 @@ footer p {
   margin: 10px auto;
 }
 
-.errorlist li {
-  display: block;
+.errorlist .error {
   color: red;
 }

@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.db import transaction, IntegrityError
 
 from .models import Album, Artist, Contact, Booking
-from .forms import BookingForm
+from .forms import ContactForm, ParagraphErrorList
 
 
 def index(request):
@@ -19,7 +19,65 @@ def detail(request, album_id):
     album = get_object_or_404(Album, pk=album_id)
     artists = [artist.name for artist in album.artists.all()]
     artists_name = " ".join(artists)
-    form = BookingForm()
+
+    if request.method == 'POST':
+        # Grab data from the existing form
+        form = ContactForm(request.POST, error_class=ParagraphErrorList)
+
+        # Validation made by forms.py > ContactForm
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            name = form.cleaned_data['name']
+
+            # We use a transaction to secure our queries.
+            # If one query fails, a rollback is performed and an IntegrityError is raised.
+            try:
+                with transaction.atomic():
+                    contact = Contact.objects.filter(email=email)
+
+                    if not contact.exists():
+                        # If a contact is not registered, create a new one.
+                        contact = Contact.objects.create(
+                            email=email,
+                            name=name
+                        )
+                    else:
+                        # We need only 1 object and not a queryset
+                        contact = contact.first()
+
+                    # If no album matches the id, the form must have been tweaked so
+                    # returning a 404 is the best solution.
+                    album = get_object_or_404(Album, id=album_id)
+                    booking = Booking.objects.create(
+                        contact=contact,
+                        album=album
+                    )
+
+                    # Make sure no one can book the album again
+                    album.available = False
+                    album.save()
+
+                    # Then thank the user!
+                    context = {
+                        'title': "Merci !",
+                        'message': "Nous vous contacterons dès que notre radio retrouvera le chemin des ondes (en résumé : très vite)."
+                    }
+
+            except IntegrityError:
+                context = {
+                    'title': "Mince !",
+                    'message': "Une erreur technique est arrivée. Ne vous en faites pas : nous sommes déjà sur le pont du navire pour investiguer. Recommencez votre requête, moussaillon !"
+                }
+            return render(request, 'store/thanks.html', context)
+        else:
+            # Form data don't match the expected format.
+            # Add errors to the template.
+            context['errors'] = form.errors.items()
+    else:
+        # If this is a GET method, we create a new form
+        form = ContactForm()
+
+
     context = {
         'album_title': album.title,
         'artists_name': artists_name,
@@ -65,55 +123,3 @@ def search(request):
         'query': title
     }
     return render(request, 'store/search.html', context)
-
-
-def contact(request):
-    form = BookingForm(request.POST)
-    album_id = request.POST.get('album_id')
-    if form.is_valid():
-        email = form.cleaned_data['email']
-        name = form.cleaned_data['name']
-        try:
-            with transaction.atomic():
-                contact = Contact.objects.create(
-                    email=email,
-                    name=name
-                )
-                album = Album.objects.get(id=album_id)
-                album.available = False
-                booking = Booking.objects.create(
-                    contact=contact,
-                    created_at=timezone.now(),
-                    album=album
-                )
-                context = {
-                    'title': "Merci !",
-                    'message': "Nous vous contacterons dès que notre radio retrouvera le chemin des ondes (en résumé : très vite)."
-                }
-        except IntegrityError:
-            context = {
-                'title': "Mince !",
-                'message': "Une erreur technique est arrivée. Ne vous en faites pas : nous sommes déjà sur le pont du navire pour investiguer. Recommencez votre requête, moussaillon !"
-            }
-        return render(request, 'store/thanks.html', context)
-    else:
-        # TODO: see with Regis.
-        # I wanted to do a redirection but the "form" object is not passed.
-        # I wonder if it's a good practice to do something like:
-        # url = reverse('store:detail', args=(album_id=album_id))
-        # return HttpResponseRedirect('{}?{}'.format(url, form))
-        # I think it's very bad in terms of security.
-        # But this solution is bothering me because we repeat the exact thing se have in `detail`
-
-        album = get_object_or_404(Album, pk=album_id)
-        artists = [artist.name for artist in album.artists.all()]
-        artists_name = " ".join(artists)
-        context = {
-            'album_title': album.title,
-            'artists_name': artists_name,
-            'album_id': album.id,
-            'form': form,
-            'errors': form.errors.items()
-        }
-        # import pdb; pdb.set_trace()
-        return render(request, 'store/detail.html', context)
