@@ -23,3 +23,9 @@
   - [x] Views : afficher les photos
 - [x] Change admin language and TIME_ZONE
 - [ ] tests : fixtures + tester les associations
+
+
+Howto create a user and associated db in postgresql:
+sudo -u postgres createuser -D -A -P username
+sudo -u postgres createdb -O username dbname
+Don't forget to alter the configuration files /etc/postgresql/8.4/main/postgresql.conf (for accessing from localhost) and /etc/postgresql/8.4/main/pg_hba.conf (replacing ident by md5 for all users, so that new user can access db)

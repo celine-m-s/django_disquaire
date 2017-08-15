@@ -1,6 +1,6 @@
-from django.shortcuts import get_object_or_404, render, HttpResponseRedirect, reverse
+from django.shortcuts import get_object_or_404, render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.utils import timezone
+# from django.utils import timezone
 from django.db import transaction, IntegrityError
 
 from .models import Album, Artist, Contact, Booking

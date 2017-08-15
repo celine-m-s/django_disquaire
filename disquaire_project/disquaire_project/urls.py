@@ -21,13 +21,13 @@ from store import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^store/', include('store.urls')),
+    url(r'^store/', include('store.urls', namespace="store")),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', admin.site.urls)
 ]
 
-# if settings.DEBUG:
-import debug_toolbar
-urlpatterns = [
-    url(r'^debug/', include(debug_toolbar.urls)),
-] + urlpatterns
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns

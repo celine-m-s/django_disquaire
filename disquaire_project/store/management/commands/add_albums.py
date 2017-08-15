@@ -40,7 +40,8 @@ class Command(BaseCommand):
                     reference += 1
                     album = Album.objects.create(
                         title=album['title'],
-                        reference=reference
+                        reference=reference,
+                        picture=album['picture']
                     )
                     album.artists = artists
                     lg.info('New album: %s'%stored_artist)
